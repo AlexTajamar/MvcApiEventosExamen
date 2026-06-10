@@ -49,5 +49,35 @@ namespace MvcApiEventosExamen.Controllers
 
             return View(eventos);
         }
+        [HttpPost]
+        public async Task<IActionResult> PreguntarIA(string pregunta)
+        {
+            if (string.IsNullOrEmpty(pregunta))
+            {
+                return RedirectToAction("Index");
+            }
+
+            // Aquí usamos el HttpClient apuntando a tu API Gateway de IA
+            using var httpClient = new HttpClient();
+
+            // Sustituye por la URL real de tu API Gateway terminada en /chat
+            string urlApiGateway = "https://m37wu1apb8.execute-api.us-east-1.amazonaws.com/Prod/chat";
+
+            var content = new StringContent(pregunta, System.Text.Encoding.UTF8, "text/plain");
+            var response = await httpClient.PostAsync(urlApiGateway, content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                string respuestaIA = await response.Content.ReadAsStringAsync();
+                TempData["RespuestaIA"] = respuestaIA;
+                TempData["PreguntaHecha"] = pregunta;
+            }
+            else
+            {
+                TempData["RespuestaIA"] = "Hubo un error al conectar con la IA.";
+            }
+
+            return RedirectToAction("Index");
+        }
     }
 }

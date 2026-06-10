@@ -27,6 +27,33 @@
         </div>
     </div>
 
+    <div class="row mb-4 justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-primary">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Pregunta a nuestro asistente de IA sobre los conciertos</h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="PreguntarIA" method="post">
+                        <div class="input-group">
+                            <input type="text" name="pregunta" class="form-control" placeholder="Ej: ¿Quién canta en el evento Teatro tour 2019?" required />
+                            <button type="submit" class="btn btn-primary">Preguntar</button>
+                        </div>
+                    </form>
+
+                    @if (TempData["RespuestaIA"] != null)
+                    {
+                        <div class="mt-3 p-3 bg-light border rounded">
+                            <p class="mb-1 text-muted"><strong>Tu pregunta:</strong> @TempData["PreguntaHecha"]</p>
+                            <p class="mb-0"><strong>Respuesta IA:</strong> @TempData["RespuestaIA"]</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <div class="row">
         @if (Model != null && Model.Any())
         {
