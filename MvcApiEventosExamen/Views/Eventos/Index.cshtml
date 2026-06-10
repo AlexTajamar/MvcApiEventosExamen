@@ -1,0 +1,56 @@
+﻿@model IEnumerable<MvcApiEventosExamen.Models.EventoModel>
+
+@{
+    ViewData["Title"] = "Listado de Conciertos";
+    var categorias = ViewBag.Categorias as List<MvcApiEventosExamen.Models.CategoriaEventoModel>;
+    var catSeleccionada = ViewData["CategoriaSeleccionada"] as int?;
+}
+
+<div class="container mt-4">
+    <h1 class="text-center mb-4">Práctica de Conciertos - AWS & Azure</h1>
+
+    <div class="row mb-4 justify-content-center">
+        <div class="col-md-8 text-center">
+            <a asp-action="Index" asp-route-idCategoria="" class="btn @(catSeleccionada == null ? "btn-primary" : "btn-outline-primary") m-1">
+                Todos los Eventos
+            </a>
+            @if (categorias != null)
+            {
+                foreach (var cat in categorias)
+                {
+                    <a asp-action="Index" asp-route-idCategoria="@cat.IdCategoria"
+                       class="btn @(catSeleccionada == cat.IdCategoria ? "btn-primary" : "btn-outline-primary") m-1">
+                        @cat.Nombre
+                    </a>
+                }
+            }
+        </div>
+    </div>
+
+    <div class="row">
+        @if (Model != null && Model.Any())
+        {
+            foreach (var evento in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <img src="@evento.Imagen" class="card-img-top" alt="@evento.Nombre" style="height: 220px; object-fit: cover;" />
+                        <div class="card-body">
+                            <h5 class="card-title text-truncate">@evento.Nombre</h5>
+                            <p class="card-text"><strong>Artista:</strong> @evento.Artista</p>
+                        </div>
+                        <div class="card-footer bg-transparent border-top-0">
+                            <span class="badge bg-secondary">@evento.Categoria?.Nombre</span>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12 text-center">
+                <div class="alert alert-info">No hay conciertos disponibles para esta categoría.</div>
+            </div>
+        }
+    </div>
+</div>
